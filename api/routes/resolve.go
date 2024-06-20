@@ -2,9 +2,8 @@ package routes
 
 import (
 	"github.com/aayush-makhija/url-shortener/database"
-	"github.com/gofiber/fiber/v2"
 	"github.com/go-redis/redis/v8"
-
+	"github.com/gofiber/fiber/v2"
 )
 
 func ResolveURL(c *fiber.Ctx) error {
@@ -14,7 +13,7 @@ func ResolveURL(c *fiber.Ctx) error {
 	defer r.Close()
 
 	value, err := r.Get(database.Ctx, url).Result()
-	if err != nil {
+	if err == redis.Nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"error": "short not found in the database",
 		})
